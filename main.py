@@ -155,7 +155,7 @@ def run_2_parameter(i,dataset):
         dataset2=fill_missing(dataset)
         df = pd.DataFrame(dataset2)
         df.to_csv("Cau3_3.csv")
-    i
+ 
 def run_3_parameter(x,y,dataset):
     if(x=='del_row_scale'):
         dataset=del_row_scale(dataset,y)
