@@ -147,6 +147,12 @@ def del_row_scale(dataset,scale):
     return dataset
 
 def delcolumn(mat, i):
+    '''
+    Xóa cột thứ i của ma trận mat
+    :param mat: List of list
+    :param i: int
+    :return: List of List
+    '''
     return [row[:i] + row[i + 1:] for row in mat]
 def del_col_scale(dataset,scale):
     '''
@@ -182,15 +188,34 @@ def del_col_scale(dataset,scale):
     print(dataset[0].__len__())
     print(dataset)
     return dataset
+def remove_duplicates(dataset):
+    '''
+    Xóa các mẫu bị trùng lặp.
+    :param dataset: List of list
+    :return: list of list
+    '''
+    set_temp=set()
+    for row in dataset:
+        temp=tuple(row)
+        if temp not in set_temp:
+            set_temp.add(temp)
+        else :
+            dataset.remove(row)
+    return dataset
+
 def run_2_parameter(i,dataset):
     if(i=='list-missing'):
         list_missing(dataset)
-    if(i=='count_missing_col'):
+    elif(i=='count_missing_col'):
         count_missing_col(dataset)
-    if(i=='fill_missing'):
+    elif(i=='fill_missing'):
         dataset2=fill_missing(dataset)
         df = pd.DataFrame(dataset2)
-        df.to_csv("Cau3_3.csv")
+        df.to_csv("Cau3_3.csv",index=False,header=False)
+    elif(i=='remove_duplicates'):
+        dataset2=remove_duplicates(dataset)
+        df = pd.DataFrame(dataset2)
+        df.to_csv("Cau3_6.csv",index=False,header=False)
 def run_3_parameter(x,y,dataset):
     if(x=='del_row_scale'):
         dataset=del_row_scale(dataset,y)
