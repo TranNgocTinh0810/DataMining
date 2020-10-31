@@ -202,7 +202,53 @@ def remove_duplicates(dataset):
         else :
             dataset.remove(row)
     return dataset
+pos_inf = 1000000000000
+nega_inf=-1000000000000
+def minmax_normalize(dataset,properties,NewMin,NewMax):
+    '''
+    Chuẩn hóa một thuộc tính numeric bằng phương pháp min-max và Z-score
+    :param dataset: List of List
+    :param properties: string
+    :param NewMin: float
+    :param NewMax: float
+    :return: list of list
+    '''
+    min=pos_inf
+    col = dataset[0].index(properties)
+    for i in range(1, len(dataset),1):
+        if (is_number(dataset[i][col])):
+            if float(dataset[i][col])<min:
+                min=float(dataset[i][col])
+    max = nega_inf
+    for i in range(1, len(dataset), 1):
+        if (is_number(dataset[i][col])):
+            if float(dataset[i][col]) > max:
+                max = float(dataset[i][col])
 
+    for row in range(1,len(dataset),1):
+        if is_number(dataset[row][col]):
+            dataset[row][col]=((float(dataset[row][col])-min)/(max-min))*((float(NewMax)-float(NewMin))+float(NewMin))
+    return dataset
+def standard_deviation(dataset):
+    mean=col_mean(dataset)
+    sum=0
+    n=0
+    for i in dataset:
+        if i!='':
+            sum=sum+pow(int(i)-mean,2)
+            n=n+1
+    return pow(sum/(n-1),1/2)
+def z_score(dataset,properties):
+    col_index = dataset[0].index(properties)
+    col=[]
+    for row in range(1,len(dataset),1):
+        col.append(dataset[row][col_index])
+    mean=col_mean(col)
+    sd=standard_deviation(col)
+    for row in range(1, len(dataset), 1):
+        if dataset[row][col_index]!='':
+            dataset[row][col_index]=(float(dataset[row][col_index])-mean)/sd
+    return dataset
 def run_2_parameter(i,dataset):
     if(i=='list-missing'):
         list_missing(dataset)
@@ -216,16 +262,26 @@ def run_2_parameter(i,dataset):
         dataset2=remove_duplicates(dataset)
         df = pd.DataFrame(dataset2)
         df.to_csv("Cau3_6.csv",index=False,header=False)
+
 def run_3_parameter(x,y,dataset):
     if(x=='del_row_scale'):
         dataset=del_row_scale(dataset,y)
         df=pd.DataFrame(dataset)
         df.to_csv("Cau3_4.csv",index=False,header=False)
-    if (x == 'del_col_scale'):
+    elif (x == 'del_col_scale'):
         dataset = del_col_scale(dataset, y)
         df = pd.DataFrame(dataset)
         df.to_csv("Cau3_5.csv",index=False,header=False)
+    elif (x == 'z_score'):
+        dataset = z_score(dataset,y)
+        df = pd.DataFrame(dataset)
+        df.to_csv("Cau3_7_b.csv", index=False, header=False)
 
+def run_5_parameter(x,y,z,t,dataset):
+    if (x=='minmax_normalize'):
+        dataset=minmax_normalize(dataset,y,z,t)
+        df = pd.DataFrame(dataset)
+        df.to_csv("Cau3_7.csv", index=False, header=False)
 
 
 if(sys.argv.__len__()==3):
@@ -234,5 +290,8 @@ if(sys.argv.__len__()==3):
 elif (sys.argv.__len__()==4):
     dataset = load_csv(sys.argv[3])
     run_3_parameter(sys.argv[1],sys.argv[2],dataset)
+elif (sys.argv.__len__()==6):
+    dataset=load_csv(sys.argv[5])
+    run_5_parameter(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],dataset)
 
 
