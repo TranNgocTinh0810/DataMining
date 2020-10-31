@@ -18,26 +18,20 @@ def is_number(s):
 dataset = load_csv(filename)
 #print ('Loaded data file{0} with {1} rows and {2} columns'.format(filename,len(dataset), len(dataset[0])))
 print(dataset[0][0])'''
-data=[[123],[234],[345]]
+'''data=[[123],[234],[345]]
 with open('Cau 3.1.csv', 'w') as f:
     write = csv.writer(f)
     print("dt2", data)
     write.writerows(data)
-    f.close()
-a=load_csv('Cau 3.1.csv')
-print(a.__len__(),data.__len__())
+    f.close()'''
+
 
 import pandas as pd
+df=pd.read_csv('test.csv',skiprows=0)
+#df.rename(columns={'Id':'I_d'},inplace=True)
+df[(df.SalePrice > '1') & (df.SaleCondition < 'B')]
 
-# list of name, degree, score
-nme = ["aparna", "pankaj", "sudhir", "Geeku"]
-deg = ["MBA", "BCA", "M.Tech", "MBA"]
-scr = [90, 40, 80, 98]
+print(df)
 
-# dictionary of lists
-dict = {'name': nme, 'degree': deg, 'score': scr}
 
-df = pd.DataFrame(dict)
 
-# saving the dataframe
-df.to_csv('GFG.csv')

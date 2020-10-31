@@ -146,6 +146,42 @@ def del_row_scale(dataset,scale):
     print(dataset)
     return dataset
 
+def delcolumn(mat, i):
+    return [row[:i] + row[i + 1:] for row in mat]
+def del_col_scale(dataset,scale):
+    '''
+    Xóa các cột bị thiếu dữ liệu với ngưỡng tỉ lệ thiếu cho trước (Ví dụ: xóa các cột bị
+    thiếu hơn 50% giá trị các thuộc tính)
+    :param dataset: list
+    :param scale: int.example 50-> meaning 50 percent
+    :return: List
+    '''
+    scale=int(scale)
+    list_missing_col = {}
+    for col in range(0, len(dataset[0]), 1):
+        for row in range(0, len(dataset), 1):
+            if (dataset[row][col] == ''):
+                if(col not in list_missing_col):
+                    list_missing_col[col]=1
+                else:
+                    list_missing_col[col]+=1
+    print(list_missing_col)
+    #value=list(list_missing_row.values())
+    #print(max(value))
+    lengthcol=dataset.__len__()
+    for col in list(list_missing_col.keys()):
+        if((list_missing_col[col]/lengthcol)<=(scale/100)):
+            del list_missing_col[col]
+    check=0
+    for col in list(list_missing_col.keys()):
+        dataset=delcolumn(dataset,col-check)
+        check=check+1
+
+    print(list_missing_col)
+    print(list_missing_col.__len__())
+    print(dataset[0].__len__())
+    print(dataset)
+    return dataset
 def run_2_parameter(i,dataset):
     if(i=='list-missing'):
         list_missing(dataset)
@@ -155,12 +191,15 @@ def run_2_parameter(i,dataset):
         dataset2=fill_missing(dataset)
         df = pd.DataFrame(dataset2)
         df.to_csv("Cau3_3.csv")
-    i
 def run_3_parameter(x,y,dataset):
     if(x=='del_row_scale'):
         dataset=del_row_scale(dataset,y)
         df=pd.DataFrame(dataset)
-        df.to_csv("Cau3_4.csv")
+        df.to_csv("Cau3_4.csv",index=False,header=False)
+    if (x == 'del_col_scale'):
+        dataset = del_col_scale(dataset, y)
+        df = pd.DataFrame(dataset)
+        df.to_csv("Cau3_5.csv",index=False,header=False)
 
 
 
